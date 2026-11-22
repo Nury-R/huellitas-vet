@@ -8,6 +8,7 @@ import GestionMascotas from './components/GestionMascotas.jsx';
 import GestionServicios from './components/GestionServicios.jsx';
 import GestionFacturas from './components/GestionFacturas.jsx';
 import GestionPagos from './components/GestionPagos.jsx';
+import GestionNotificaciones from './components/GestionNotificaciones.jsx';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ const botones = [
   { nombre: 'Consultar citas', texto: 'Consultar citas', icono: '🗓️' },
   { nombre: 'Facturación y pagos', texto: 'Facturación y pagos', icono: '🧾' },
   { nombre: 'Servicios', texto: 'Servicios veterinarios', icono: '🩺' },
+  { nombre: 'Notificaciones', texto: 'Notificaciones', icono: '🔔' },
 ];
 if (!autenticado) {
   return <Login onLogin={() => setAutenticado(true)} />;
@@ -55,6 +57,8 @@ if (!autenticado) {
   <ConsultarCitas onVolver={() => setModulo('Inicio')} />
   ) : modulo === 'Servicios' ? (
   <GestionServicios onVolver={() => setModulo('Inicio')} />
+  ) : modulo === 'Notificaciones' ? (
+  <GestionNotificaciones onVolver={() => setModulo('Inicio')} />
 ) : modulo === 'Facturación y pagos' ? (
   <>
     <GestionFacturas onVolver={() => setModulo('Inicio')} />

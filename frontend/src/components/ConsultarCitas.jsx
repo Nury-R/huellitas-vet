@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
-const API = 'https://huellitas-vet-production.up.railway.app/api/citas';
+const API = 'https://huellitas-vet-production.up.railway.app/api';
 
 function ConsultarCitas({ onVolver }) {
   const [citas, setCitas] = useState([]);

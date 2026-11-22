@@ -561,8 +561,8 @@
 }
 
 .login-logo {
-  width: 100px;
-  height: 100px;
+  width: 125px;
+  height: 125px;
   object-fit: contain;
   margin: auto;
 }
@@ -643,4 +643,24 @@
 .boton-eliminar {
   background: #c0392b;
   color: white;
+}
+
+/* Mejorar visibilidad de los títulos del login */
+.login-formulario h1 {
+  color: #087f80 !important;
+  opacity: 1 !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+.login-formulario h2 {
+  color: #17365d !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+}
+
+/* Texto de bienvenida */
+.login-formulario p {
+  color: #40566f !important;
+  opacity: 1 !important;
 }
