@@ -1,0 +1,646 @@
+
+.app {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #f1f8f3;
+  color: #254333;
+}
+
+.encabezado {
+  padding: 28px;
+  text-align: center;
+  background: #218454;
+  color: white;
+}
+
+.encabezado h1 {
+  margin: 0 0 8px;
+}
+
+.contenido {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 24px;
+  text-align: center;
+}
+
+.modulos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+
+
+.modulos button {
+  min-height: 125px;
+  padding: 18px 12px;
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px #17334f18;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+/* Morado: usuarios */
+.modulos button:nth-child(1) {
+  background: #8064b5;
+}
+
+/* Verde: mascotas */
+.modulos button:nth-child(2) {
+  background: #49a66b;
+}
+
+/* Azul: citas */
+.modulos button:nth-child(3) {
+  background: #388bd4;
+}
+
+/* Naranja: servicios */
+.modulos button:nth-child(4) {
+  background: #ed9238;
+}
+
+/* Rosado: facturación y pagos */
+.modulos button:nth-child(5) {
+  background: #d84f8b;
+}
+
+.modulos button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-3px);
+}
+
+.modulos button:active {
+  transform: scale(0.98);
+}
+
+.modulos button:focus-visible {
+  outline: 3px solid #17334f;
+  outline-offset: 3px;
+}
+
+
+.formulario-panel {
+  max-width: 850px;
+  margin: 30px auto;
+  padding: 28px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px #203b2910;
+}
+
+.formulario-panel h2 {
+  color: #176b48;
+}
+
+.campos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.campos-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-weight: 600;
+}
+
+.campos-grid input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bdcfc2;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.campos-grid input:focus {
+  outline: 2px solid #218454;
+  outline-offset: 2px;
+}
+
+.acciones-formulario {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.acciones-formulario button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #218454;
+  color: white;
+  cursor: pointer;
+}
+
+.acciones-formulario .boton-secundario {
+  background: #64746a;
+}
+
+.acciones-formulario button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.mensaje {
+  padding: 12px;
+  border-radius: 7px;
+}
+
+.mensaje.exito {
+  background: #e0f4e5;
+  color: #176b48;
+}
+
+.mensaje.error {
+  background: #fce8e6;
+  color: #a12622;
+}
+
+@media (max-width: 600px) {
+  .campos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario-panel {
+    padding: 18px;
+  }
+}
+.contenido h2 {
+  color: #12345a;
+}
+
+.contenido > p {
+  color: #263b50;
+}
+
+.logo-huellitas {
+  display: block;
+  width: 180px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Encabezado de la aplicación */
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #dcebe7;
+}
+
+.encabezado h1 {
+  margin: 0;
+  color: #087f80;
+  font-size: 25px;
+}
+
+.encabezado p {
+  margin: 4px 0 0;
+  color: #526a77;
+  font-size: 14px;
+}
+
+.logo-huellitas {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+/* Contenido */
+.contenido {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 100px;
+}
+
+.bienvenida {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.bienvenida h2 {
+  color: #086b69;
+  font-size: 26px;
+}
+
+.bienvenida p {
+  color: #526a77;
+  line-height: 1.5;
+}
+
+/* Tarjetas de módulos */
+.modulos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.modulos .tarjeta-modulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 135px;
+  padding: 16px 10px;
+  border: none;
+  border-radius: 17px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 4px 10px #17334f18;
+}
+
+.icono-modulo {
+  font-size: 34px;
+}
+
+/* Colores individuales */
+.color-1 { background: #8064b5; }
+.color-2 { background: #49a66b; }
+.color-3 { background: #388bd4; }
+.color-4 { background: #ed9238; }
+.color-5 { background: #d84f8b; }
+.color-6 { background: #168f99; }
+
+/* Barra inferior móvil */
+.barra-inferior {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 9px 4px calc(9px + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1px solid #dcebe7;
+  box-shadow: 0 -3px 12px #17334f0c;
+}
+
+.barra-inferior button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 2px;
+  border: none;
+  background: transparent;
+  color: #647782;
+  font-size: 11px;
+}
+
+.barra-inferior button span {
+  font-size: 23px;
+}
+
+.barra-inferior button.nav-activo {
+  color: #087f80;
+  font-weight: 700;
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 480px) {
+  .contenido {
+    padding: 20px 13px 100px;
+  }
+
+  .encabezado h1 {
+    font-size: 21px;
+  }
+
+  .logo-huellitas {
+    width: 60px;
+    height: 60px;
+  }
+
+  .bienvenida h2 {
+    font-size: 22px;
+  }
+
+  .modulos {
+    gap: 11px;
+  }
+
+  .modulos .tarjeta-modulo {
+    min-height: 120px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .icono-modulo {
+    font-size: 30px;
+  }
+}
+
+/* Computadores */
+@media (min-width: 768px) {
+  .contenido {
+    padding-top: 35px;
+  }
+
+  .modulos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .modulos .tarjeta-modulo {
+    min-height: 155px;
+  }
+
+  .barra-inferior {
+    max-width: 600px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #dcebe7;
+    border-radius: 18px 18px 0 0;
+  }
+}
+/* Ajustes para celulares */
+@media (max-width: 600px) {
+  .encabezado {
+    padding: 16px 12px;
+    gap: 10px;
+  }
+
+  .encabezado h1 {
+    font-size: 25px;
+    line-height: 1.2;
+  }
+
+  .encabezado p {
+    font-size: 17px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .contenido h2 {
+    font-size: 27px;
+    line-height: 1.3;
+  }
+
+  .contenido p {
+    font-size: 17px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Formulario de registro de mascotas */
+.formulario {
+  width: 100%;
+  max-width: 520px;
+  margin: 24px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 0 16px 24px;
+}
+
+.formulario label {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #244b4b;
+}
+
+.formulario input,
+.formulario select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #b8ceca;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.formulario button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 8px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #168f99;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.formulario button[type="button"] {
+  background: #64748b;
+}
+
+.panel {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.panel h2,
+.panel > p {
+  text-align: center;
+  padding: 0 12px;
+}
+
+.panel h2 {
+  color: #244b4b;
+  font-size: clamp(24px, 5vw, 34px);
+}
+
+@media (max-width: 600px) {
+  .contenido {
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .formulario {
+    max-width: 100%;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+.tarjeta-mascota {
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+  margin: 16px auto;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #d3e3df;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(24, 80, 75, 0.08);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.tarjeta-mascota h3 {
+  margin: 0 0 14px;
+  color: #168f99;
+  font-size: 24px;
+  text-align: center;
+}
+
+.tarjeta-mascota p {
+  margin: 9px 0;
+  color: #34504d;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.tarjeta-mascota strong {
+  color: #244b4b;
+}
+
+@media (max-width: 600px) {
+  .tarjeta-mascota {
+    max-width: 100%;
+    padding: 16px;
+  }
+}
+
+/* Espacio para que la barra inferior no tape el contenido */
+.contenido {
+  padding-bottom: 110px;
+}
+
+.panel {
+  padding-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  .contenido {
+    padding-bottom: 125px;
+  }
+
+  .barra-inferior {
+    z-index: 1000;
+  }
+}
+.login-contenedor {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-formulario {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin: auto;
+}
+
+.login-formulario h1,
+.login-formulario h2,
+.login-formulario p {
+  text-align: center;
+}
+
+.login-formulario input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.login-formulario button {
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: #269b65;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-formulario button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.gestion-usuarios {
+  width: 100%;
+}
+
+.lista-usuarios {
+  margin-top: 30px;
+}
+
+.lista-usuarios input {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.usuario-tarjeta {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.usuario-tarjeta p {
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+.acciones-usuario {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.acciones-usuario button,
+.boton-eliminar {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.boton-eliminar {
+  background: #c0392b;
+  color: white;
+}
