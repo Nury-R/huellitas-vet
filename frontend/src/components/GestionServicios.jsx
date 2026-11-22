@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = `http://${window.location.hostname}:3000/api/servicios`;
+const API_URL = 'https://huellitas-vet-production.up.railway.app/api';
 
 const formularioInicial = {
   nombre_servicio: '',

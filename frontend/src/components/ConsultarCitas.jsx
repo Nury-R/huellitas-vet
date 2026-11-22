@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
-const API = `http://${window.location.hostname}:3000/api`;
+const API = 'https://huellitas-vet-production.up.railway.app/api';
 
 function ConsultarCitas({ onVolver }) {
   const [citas, setCitas] = useState([]);

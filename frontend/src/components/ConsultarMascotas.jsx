@@ -10,7 +10,7 @@ function ConsultarMascotas({ onVolver }) {
     const consultar = async () => {
       try {
         const respuesta = await fetch(
-          'http://localhost:3000/api/mascotas'
+          'https://huellitas-vet-production.up.railway.app/api/mascotas'
         );
 
         if (!respuesta.ok) {

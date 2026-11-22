@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-const API_URL = `http://${window.location.hostname}:3000/api/usuarios`;
+const API_URL = 'https://huellitas-vet-production.up.railway.app/api';
 
 function RegistroUsuario({ onVolver }) {
   const [formulario, setFormulario] = useState({
