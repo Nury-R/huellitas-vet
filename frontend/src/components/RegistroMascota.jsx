@@ -1,5 +1,5 @@
 import { useState } from 'react';
-const API_URL = 'https://huellitas-vet-production.up.railway.app/api';
+const API_URL = 'https://huellitas-vet-production.up.railway.app/api/mascotas';
 function RegistroMascota({ onVolver }) {
   const [formulario, setFormulario] = useState({
     nombre: '',

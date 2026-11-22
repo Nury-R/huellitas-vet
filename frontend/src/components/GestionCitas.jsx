@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
-const API = 'https://huellitas-vet-production.up.railway.app/api';
+const API = 'https://huellitas-vet-production.up.railway.app/api/citas';
 
 const formularioInicial = {
   fecha: '',
