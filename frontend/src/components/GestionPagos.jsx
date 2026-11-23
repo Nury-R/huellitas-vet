@@ -1,12 +1,13 @@
 
 import { useEffect, useState } from 'react';
 
-const API = 'https://huellitas-vet-production.up.railway.app/api/pagos';
+const API = 'https://huellitas-vet-production.up.railway.app/api';
 
 const formularioInicial = {
   fecha_pago: '',
   metodo_pago: '',
-  estado_pago: 'Pendiente',
+  estado_pago: 'Pagado',
+  tipo_pago: 'Completo',
   valor: '',
   id_factura: '',
 };
@@ -20,6 +21,40 @@ function GestionPagos({ onVolver }) {
   const [mensaje, setMensaje] = useState('');
   const [cargando, setCargando] = useState(false);
 
+  // FACTURA SELECCIONADA
+  const facturaSeleccionada = facturas.find(
+    (factura) =>
+      String(factura.id_factura) === String(formulario.id_factura)
+  );
+
+  const totalFactura = Number(facturaSeleccionada?.total || 0);
+
+  // PAGOS ANTERIORES DE LA FACTURA
+  const totalAbonado = pagos
+    .filter(
+      (pago) =>
+        String(pago.id_factura) === String(formulario.id_factura) &&
+        pago.estado_pago === 'Pagado' &&
+        Number(pago.id_pago) !== Number(pagoEditando)
+    )
+    .reduce(
+      (suma, pago) => suma + Number(pago.valor || 0),
+      0
+    );
+
+  const saldoPendiente = Math.max(
+    0,
+    totalFactura - totalAbonado
+  );
+
+  const valorIngresado = Number(formulario.valor || 0);
+
+  const nuevoSaldo = Math.max(
+    0,
+    saldoPendiente - valorIngresado
+  );
+
+  // CONSULTAR PAGOS
   async function cargarPagos() {
     try {
       const respuesta = await fetch(`${API}/pagos`);
@@ -34,6 +69,7 @@ function GestionPagos({ onVolver }) {
     }
   }
 
+  // CARGAR PAGOS Y FACTURAS
   useEffect(() => {
     let cancelado = false;
 
@@ -58,7 +94,9 @@ function GestionPagos({ onVolver }) {
         }
       })
       .catch((error) => {
-        if (!cancelado) setMensaje(error.message);
+        if (!cancelado) {
+          setMensaje(error.message);
+        }
       });
 
     return () => {
@@ -66,40 +104,117 @@ function GestionPagos({ onVolver }) {
     };
   }, []);
 
+  // MANEJAR CAMBIOS DEL FORMULARIO
   function manejarCambio(e) {
+    const { name, value } = e.target;
+
+    if (name === 'tipo_pago') {
+      setFormulario((anterior) => ({
+        ...anterior,
+        tipo_pago: value,
+        valor:
+          value === 'Completo'
+            ? String(saldoPendiente)
+            : '',
+        estado_pago: 'Pagado',
+      }));
+
+      return;
+    }
+
+    if (name === 'id_factura') {
+      const factura = facturas.find(
+        (f) => String(f.id_factura) === String(value)
+      );
+
+      const abonado = pagos
+        .filter(
+          (p) =>
+            String(p.id_factura) === String(value) &&
+            p.estado_pago === 'Pagado' &&
+            Number(p.id_pago) !== Number(pagoEditando)
+        )
+        .reduce(
+          (suma, p) => suma + Number(p.valor || 0),
+          0
+        );
+
+      const saldo = Math.max(
+        0,
+        Number(factura?.total || 0) - abonado
+      );
+
+      setFormulario((anterior) => ({
+        ...anterior,
+        id_factura: value,
+        valor:
+          anterior.tipo_pago === 'Completo'
+            ? String(saldo)
+            : '',
+        estado_pago: 'Pagado',
+      }));
+
+      return;
+    }
+
     setFormulario((anterior) => ({
       ...anterior,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   }
 
+  // PREPARAR EDICIÓN
   function prepararEdicion(pago) {
     setPagoEditando(pago.id_pago);
 
     setFormulario({
       fecha_pago: String(pago.fecha_pago).slice(0, 10),
       metodo_pago: pago.metodo_pago,
-      estado_pago: pago.estado_pago,
+      estado_pago: 'Pagado',
+      tipo_pago: 'Abono',
       valor: pago.valor,
       id_factura: String(pago.id_factura),
     });
 
     setMensaje(`Editando pago #${pago.id_pago}`);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 
+  // CANCELAR EDICIÓN
   function cancelarEdicion() {
     setPagoEditando(null);
     setFormulario(formularioInicial);
     setMensaje('');
   }
 
+  // REGISTRAR O ACTUALIZAR PAGO
   async function manejarEnvio(e) {
     e.preventDefault();
+
     setCargando(true);
     setMensaje('');
 
     try {
+      const monto = Number(formulario.valor);
+
+      if (!formulario.id_factura) {
+        throw new Error('Selecciona una factura.');
+      }
+
+      if (!Number.isFinite(monto) || monto <= 0) {
+        throw new Error('Ingresa un valor de pago válido.');
+      }
+
+      if (monto > saldoPendiente) {
+        throw new Error(
+          `El valor supera el saldo pendiente de $${saldoPendiente.toLocaleString('es-CO')}.`
+        );
+      }
+
       const editando = pagoEditando !== null;
 
       const respuesta = await fetch(
@@ -112,8 +227,10 @@ function GestionPagos({ onVolver }) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            ...formulario,
-            valor: Number(formulario.valor),
+            fecha_pago: formulario.fecha_pago,
+            metodo_pago: formulario.metodo_pago,
+            estado_pago: 'Pagado',
+            valor: monto,
             id_factura: Number(formulario.id_factura),
           }),
         }
@@ -129,12 +246,16 @@ function GestionPagos({ onVolver }) {
 
       setMensaje(
         resultado.mensaje ||
-          (editando ? 'Pago actualizado.' : 'Pago registrado.')
+          (editando
+            ? 'Pago actualizado correctamente.'
+            : 'Pago registrado correctamente.')
       );
 
       setFormulario(formularioInicial);
       setPagoEditando(null);
+
       await cargarPagos();
+
     } catch (error) {
       setMensaje(error.message);
     } finally {
@@ -142,6 +263,7 @@ function GestionPagos({ onVolver }) {
     }
   }
 
+  // ELIMINAR PAGO
   async function eliminarPago(id) {
     const confirmar = window.confirm(
       '¿Deseas eliminar este pago?'
@@ -163,12 +285,15 @@ function GestionPagos({ onVolver }) {
       }
 
       setMensaje('Pago eliminado correctamente.');
+
       await cargarPagos();
+
     } catch (error) {
       setMensaje(error.message);
     }
   }
-  
+
+  // FILTRAR PAGOS
   const pagosFiltrados = pagos.filter((pago) => {
     const texto = busqueda.toLowerCase();
 
@@ -181,15 +306,44 @@ function GestionPagos({ onVolver }) {
     );
   });
 
+  // INTERFAZ
   return (
     <section className="formulario-panel gestion-usuarios">
       <h2>💳 Gestión de pagos</h2>
-      <p>Administra los pagos de las facturas de Huellitas Vet.</p>
+
+      <p>
+        Administra los pagos de las facturas de Huellitas Vet.
+      </p>
 
       <form onSubmit={manejarEnvio}>
-        <h3>{pagoEditando ? 'Editar pago' : 'Registrar pago'}</h3>
+        <h3>
+          {pagoEditando ? 'Editar pago' : 'Registrar pago'}
+        </h3>
 
         <div className="campos-grid">
+
+          <label>
+            Factura asociada
+            <select
+              name="id_factura"
+              value={formulario.id_factura}
+              onChange={manejarCambio}
+              required
+            >
+              <option value="">Selecciona una factura</option>
+
+              {facturas.map((factura) => (
+                <option
+                  key={factura.id_factura}
+                  value={factura.id_factura}
+                >
+                  Factura #{factura.id_factura} — $
+                  {Number(factura.total).toLocaleString('es-CO')}
+                </option>
+              ))}
+            </select>
+          </label>
+
           <label>
             Fecha de pago
             <input
@@ -218,52 +372,62 @@ function GestionPagos({ onVolver }) {
           </label>
 
           <label>
-            Estado del pago
+            Tipo de pago
             <select
-              name="estado_pago"
-              value={formulario.estado_pago}
+              name="tipo_pago"
+              value={formulario.tipo_pago}
               onChange={manejarCambio}
               required
             >
-              <option value="Pendiente">Pendiente</option>
-              <option value="Pagado">Pagado</option>
-              <option value="Rechazado">Rechazado</option>
+              <option value="Completo">Pago completo</option>
+              <option value="Abono">Abono</option>
             </select>
           </label>
 
+          {formulario.id_factura && (
+            <div className="resumen-pago">
+              <h4>Resumen de la factura</h4>
+
+              <p>
+                Total de la factura: $
+                {totalFactura.toLocaleString('es-CO')}
+              </p>
+
+              <p>
+                Total abonado anteriormente: $
+                {totalAbonado.toLocaleString('es-CO')}
+              </p>
+
+              <p>
+                Saldo pendiente antes del pago: $
+                {saldoPendiente.toLocaleString('es-CO')}
+              </p>
+
+              <p>
+                Saldo pendiente después del pago: $
+                {nuevoSaldo.toLocaleString('es-CO')}
+              </p>
+            </div>
+          )}
+
           <label>
-            Valor del pago
+            {formulario.tipo_pago === 'Abono'
+              ? 'Valor del abono'
+              : 'Valor del pago'}
+
             <input
               type="number"
               name="valor"
-              min="0"
-              step="0.01"
+              min="1"
+              step="1"
+              max={saldoPendiente}
               value={formulario.valor}
               onChange={manejarCambio}
+              placeholder="Ingresa el valor"
               required
             />
           </label>
 
-          <label>
-            Factura asociada
-            <select
-              name="id_factura"
-              value={formulario.id_factura}
-              onChange={manejarCambio}
-              required
-            >
-              <option value="">Selecciona una factura</option>
-              {facturas.map((factura) => (
-                <option
-                  key={factura.id_factura}
-                  value={factura.id_factura}
-                >
-                  Factura #{factura.id_factura} — $
-                  {Number(factura.total).toLocaleString('es-CO')}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
 
         <div className="acciones-formulario">
@@ -276,14 +440,19 @@ function GestionPagos({ onVolver }) {
           </button>
 
           {pagoEditando && (
-            <button type="button" onClick={cancelarEdicion}>
+            <button
+              type="button"
+              onClick={cancelarEdicion}
+            >
               Cancelar edición
             </button>
           )}
         </div>
       </form>
 
-      {mensaje && <p role="status">{mensaje}</p>}
+      {mensaje && (
+        <p role="status">{mensaje}</p>
+      )}
 
       <div className="lista-usuarios">
         <h3>Pagos registrados ({pagos.length})</h3>
@@ -299,16 +468,27 @@ function GestionPagos({ onVolver }) {
           <p>No se encontraron pagos.</p>
         ) : (
           pagosFiltrados.map((pago) => (
-            <article className="usuario-tarjeta" key={pago.id_pago}>
+            <article
+              className="usuario-tarjeta"
+              key={pago.id_pago}
+            >
               <div>
                 <strong>Pago #{pago.id_pago}</strong>
-                <p>Fecha: {String(pago.fecha_pago).slice(0, 10)}</p>
+
+                <p>
+                  Fecha: {String(pago.fecha_pago).slice(0, 10)}
+                </p>
+
                 <p>Método: {pago.metodo_pago}</p>
+
                 <p>Estado: {pago.estado_pago}</p>
+                <p>Tipo de pago: {pago.tipo_pago}</p>
+
                 <p>
                   Valor: $
                   {Number(pago.valor).toLocaleString('es-CO')}
                 </p>
+
                 <p>Factura: #{pago.id_factura}</p>
               </div>
 
