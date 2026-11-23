@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
-const API = 'https://huellitas-vet-production.up.railway.app/api/facturas';
+const API = 'https://huellitas-vet-production.up.railway.app/api';
 
 const formularioInicial = {
   fecha_factura: '',
@@ -81,11 +81,30 @@ function GestionFacturas({ onVolver }) {
   }, []);
 
   function manejarCambio(e) {
+  const { name, value } = e.target;
+
+  if (name === 'id_servicio') {
+    const servicioSeleccionado = servicios.find(
+      (s) => String(s.id_servicio) === String(value)
+    );
+
+    const precio = Number(servicioSeleccionado?.costo || 0);
+
     setFormulario((anterior) => ({
       ...anterior,
-      [e.target.name]: e.target.value,
+      id_servicio: value,
+      precio_unitario: precio,
+      total: precio,
     }));
+
+    return;
   }
+
+  setFormulario((anterior) => ({
+    ...anterior,
+    [name]: value,
+  }));
+}
 
   function prepararEdicion(factura) {
     setFacturaEditando(factura.id_factura);
