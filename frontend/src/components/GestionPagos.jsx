@@ -230,6 +230,7 @@ function GestionPagos({ onVolver }) {
             fecha_pago: formulario.fecha_pago,
             metodo_pago: formulario.metodo_pago,
             estado_pago: 'Pagado',
+            tipo_pago: formulario.tipo_pago,
             valor: monto,
             id_factura: Number(formulario.id_factura),
           }),
